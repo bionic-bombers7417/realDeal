@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.DMC60;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -40,8 +41,7 @@ public class Robot extends TimedRobot {
   private final PWMVictorSPX left2 = new PWMVictorSPX(1);
   private final PWMVictorSPX right2 = new PWMVictorSPX(3);
   private final Spark elevator = new Spark(9);
-  private final Spark grabber = new Spark(8);
-  private final Spark grabber2 = new Spark(5);
+  private final DMC60 grabber = new DMC60(8);
   private final Joystick m_stick = new Joystick(0);
   private final Joystick m_joy = new Joystick(1);
   private final Timer m_timer = new Timer();
@@ -192,7 +192,31 @@ public class Robot extends TimedRobot {
         }
       }
     }
+    /*double speed = .1;
+    double oppspeed = -.1;
+    if(m_joy.getRawButton(9)){
+      m_timer.reset();
+      m_timer.start();
+      while(true){
+        if (m_timer.get() < 0.3) {
+          grabber.set(speed);
+        } else {
+          break;
+        }
+      }
+    }
 
+    if(m_joy.getRawButton(10)){
+      m_timer.reset();
+      m_timer.start();
+      while(true){
+        if (m_timer.get() < 0.3) {
+          grabber.set(oppspeed);
+        } else {
+          break;
+        }
+      }
+    }*/
 
   }
 
@@ -332,6 +356,7 @@ public class Robot extends TimedRobot {
           SmartDashboard.putNumber(   "IMU_Update_Count",     ahrs.getUpdateCount());
       }
   }
+  
 
 
 
