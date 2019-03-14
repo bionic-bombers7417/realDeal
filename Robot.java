@@ -40,8 +40,8 @@ public class Robot extends TimedRobot {
   private final PWMVictorSPX right1 = new PWMVictorSPX(2);
   private final PWMVictorSPX left2 = new PWMVictorSPX(1);
   private final PWMVictorSPX right2 = new PWMVictorSPX(3);
-  private final Spark elevator = new Spark(9);
-  private final DMC60 grabber = new DMC60(8);
+  private final PWMVictorSPX elevator = new PWMVictorSPX(5);
+  private final PWMVictorSPX grabber = new PWMVictorSPX(9);
   private final Joystick m_stick = new Joystick(0);
   private final Joystick m_joy = new Joystick(1);
   private final Timer m_timer = new Timer();
@@ -120,16 +120,6 @@ public class Robot extends TimedRobot {
     right1.set(m_stick.getRawAxis(1)*.7 + m_stick.getRawAxis(4)*.5);
     right2.set(m_stick.getRawAxis(1)*.7 + m_stick.getRawAxis(4)*.5);
 
-
-    //motor for the elevator on Logitech Game Controller
-    if(m_stick.getRawButton(1)){
-      elevator.set(1);
-    }else if(m_stick.getRawButton(2)){
-      elevator.set(-1);
-    }else{
-      //stops the elevator from gradually decreasing in height
-      elevator.set(-.08);
-    }
     if(m_joy.getRawButton(1)){
       elevator.set(1);
     }else if(m_joy.getRawButton(2)){
@@ -138,26 +128,43 @@ public class Robot extends TimedRobot {
       //stops the elevator from gradually decreasing in height
       elevator.set(-.08);
     }
-    
-    //grabber motors
-    if(m_stick.getRawButton(3)){
-      grabber.set(1);
-    }else if(m_stick.getRawButton(4)){
-      grabber.set(-1);
-    }else{
-      grabber.set(0);
-    }
-
-
 
   //grabber motors
-    if(m_joy.getRawButton(5)){
-      grabber.set(1);
-    }else if(m_joy.getRawButton(6)){
-      grabber.set(-1);
-    }else{
-      grabber.set(0);
+  if(m_joy.getRawButton(9)){
+    m_timer.reset();
+    m_timer.start();
+    while(true){
+      
+      if (m_timer.get() < 0.25) {
+        grabber.set(.3);
+        elevator.set(-.08);
+      } else {
+        break;
+      }
     }
+  }else if(m_joy.getRawButton(10)){
+    m_timer.reset();
+    m_timer.start();
+    while(true){
+      
+      if (m_timer.get() < 0.25) {
+        grabber.set(-.3);
+        elevator.set(-.08);
+      } else {
+        break;
+      }
+    }
+  }else{
+    grabber.set(0);
+  }
+
+  if(m_joy.getRawButton(11)){
+    grabber.set(.6);
+  }else if(m_joy.getRawButton(12)){
+    grabber.set(-.6);
+  }else{
+    grabber.set(0);
+  }
 
     //Lift to Ball Stages
     if(m_joy.getRawButton(3)){
@@ -192,31 +199,7 @@ public class Robot extends TimedRobot {
         }
       }
     }
-    /*double speed = .1;
-    double oppspeed = -.1;
-    if(m_joy.getRawButton(9)){
-      m_timer.reset();
-      m_timer.start();
-      while(true){
-        if (m_timer.get() < 0.3) {
-          grabber.set(speed);
-        } else {
-          break;
-        }
-      }
-    }
-
-    if(m_joy.getRawButton(10)){
-      m_timer.reset();
-      m_timer.start();
-      while(true){
-        if (m_timer.get() < 0.3) {
-          grabber.set(oppspeed);
-        } else {
-          break;
-        }
-      }
-    }*/
+    
 
   }
 
