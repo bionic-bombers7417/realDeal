@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SerialPort;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Spark;
@@ -44,6 +46,8 @@ public class Robot extends TimedRobot {
   private final PWMVictorSPX grabber = new PWMVictorSPX(9);
   private final Joystick m_stick = new Joystick(0);
   private final Joystick m_joy = new Joystick(1);
+  private final DigitalInput out = new DigitalInput(8);
+  private final DigitalInput in = new DigitalInput(9);
   private final Timer m_timer = new Timer();
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
@@ -120,6 +124,32 @@ public class Robot extends TimedRobot {
     right1.set(m_stick.getRawAxis(1)*.7 + m_stick.getRawAxis(4)*.5);
     right2.set(m_stick.getRawAxis(1)*.7 + m_stick.getRawAxis(4)*.5);
 
+
+    if(out.get()){
+      m_timer.reset();
+      m_timer.start();
+      while(true){
+        
+        if (m_timer.get() < 0.25) {
+          grabber.set(-.3);
+          elevator.set(-.08);
+        } else {
+          break;
+        }
+      }
+    }else if(in.get()){
+      m_timer.reset();
+      m_timer.start();
+      while(true){
+        
+        if (m_timer.get() < 0.25) {
+          grabber.set(.3);
+          elevator.set(-.08);
+        } else {
+          break;
+        }
+      }
+    }
     if(m_joy.getRawButton(1)){
       elevator.set(1);
     }else if(m_joy.getRawButton(2)){
